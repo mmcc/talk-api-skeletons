@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Skeleton-free Closets: Designing internal APIs you can be proud of</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<!-- For Fonts -->
+		<link rel="stylesheet" href="lib/css/font-awesome.css">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/mmcc.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', include the PDF print sheet -->
+		<script>
+			if( window.location.search.match( /print-pdf/gi ) ) {
+				var link = document.createElement( 'link' );
+				link.rel = 'stylesheet';
+				link.type = 'text/css';
+				link.href = 'css/print/pdf.css';
+				document.getElementsByTagName( 'head' )[0].appendChild( link );
+			}
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>Skeleton Free Closets</h1>
+					<h3>Designing internal APIs you can be <span class="text green">proud</span> of</h3>
+					<h6><a href="http://www.apistrategyconference.com/2014Chicago">API Strategy &amp; Practice: Chicago, 2014</a></small></h6>
+					<p>
+							<small><a href="http://twitter.com/matt_mcclure"><i class="fa fa-twitter"></i>  @matt_mcclure</a></small>
+					</p>
+				</section>
+
+				<section>
+					<img src="/img/logos/brightcove.png" class="no-border"></img>
+					<img src="/img/logos/zencoder.png" class="no-border"></img>
+					<img src="/img/logos/videojs.png" class="no-border"></img>
+				</section>
+
+				<section>
+					<section>
+						<h2>The Rise of the <span class="text pink">Internal</span> API <i class="fa fa-line-chart text pink"></i></h2>
+					</section>
+
+					<section>
+						<h2><span class="text orange">Then</span>: The Monolith <i class="fa fa-institution text orange"></i></h2>
+						<p>One application to rule them all.</p>
+
+						<aside class="notes">
+        			Make sure to mention that the "then / now" thing is a bit of a hyperbole. Microservices are in vogue, but there's
+							still debate about which architecture is actually better.
+    				</aside>
+					</section>
+
+					<section>
+						<h2><span class="text indigo">Now</span>: Microservices <i class="fa fa-puzzle-piece text indigo"></i></h2>
+						<p>A suite of small services that communicate.</p>
+
+						<aside class="notes">
+							And how do these services communicate? Generally via HTTP! Either way, APIs abound!
+						</aside>
+					</section>
+
+					<section>
+						<h2><i class="fa fa-institution text orange"></i> <i class="fa fa-arrow-circle-o-right"></i> <i class="fa fa-puzzle-piece text indigo"></i></h2>
+						<p><small>(Or at least somewhere in between)</small></p>
+						<aside class="notes">
+							A lot of companies with a single application architecture are trying to transition to more of a microservices
+							architecture, or somewhere in between.
+						</aside>
+					</section>
+
+					<section>
+						<h2>Which is <span class="text pink">cool</span>!</h2>
+						<h3>But...</h3>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>The <i class="fa fa-frown-o text green"></i> truth</h2>
+					</section>
+
+					<section>
+						<h2>Most<span class="text orange">*</span> internal APIs <span class="text orange">suck</span></h2>
+						<p><small><span class="text orange">*</span>Based on a highly scientific sampling of my friends and colleagues</small></p>
+					</section>
+
+					<section>
+						<h2>But <span class="text blue">why</span>?</h2>
+						<img class="fragment" src="/img/sarah-mclachlan.png"/>
+					</section>
+
+					<section>
+						<h2>Nobody <i class="fa fa-heart text pink"></i> them</h2>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>What seems to <span class="text indigo">happen</span></h2>
+						<ol>
+							<li class="fragment">There are two services (or an application is broken up)</li>
+							<li class="fragment">Need to glue these things together</li>
+							<li class="fragment">Slap together an API interface</li>
+							<li class="fragment">Functional? Done.</li>
+							<li class="fragment"><i class="fa fa-recycle text indigo"></i></li>
+						</ol>
+
+						<aside class="notes">
+							"If you approach micro-service architectures incrementally, you tend not to think very deeply about
+							service decomposition and service boundaries, so, pretty much by default, you end-up with rough APIs" - Keith Mason
+					</section>
+
+					<section>
+						<h2>[actual] example interaction</h2>
+						<p>
+							<ul class="unstyled">
+								<li class="fragment"><span class="text blue">Me</span>: <q>&ldquo;Do you have any examples of a bad internal API?&rdquo;</q></li>
+								<li class="fragment"><span class="text pink">Colleague</span>: <q>&ldquo;Well, the other day I saw...&rdquo;</q></li>
+								<li class="fragment"><span class="text blue">Me</span>: <q>&ldquo;Perfect. Can you link me to the docs?&rdquo;</q></li>
+								<li class="fragment"><span class="text pink">Colleague</span>: <q>*blank stare*</q></li>
+								<li class="fragment"><span class="text pink">Colleague</span>: <q>*laughter*</q></li>
+							</ul>
+						</p>
+					</section>
+				</section>
+
+				<section>
+					<h2>So how can we do <span class="text green">better</span>?</h2>
+				</section>
+
+				<section>
+					<section>
+						<h2><span class="text orange">Design</span> first</h2>
+						<p><small>
+							<span class="fragment">Every.</span>
+							<span class="fragment">Single.</span>
+							<span class="fragment">Time.</span>
+						</small></p>
+					</section>
+
+					<section>
+						<h2>But what about...</h2>
+						<h3><span class="text indigo underlined">No</span>.</h3>
+					</section>
+
+					<section>
+						<h2>Too many <i class="fa fa-wrench text green"></i> for excuses</h2>
+						<p>
+							<a class="fragment" href="http://apiary.io"><img class="no-border" src="/img/apiary.png"/></a><br/>
+							<a class="fragment" href="http://apiblueprint.org"><img class="no-border" src="/img/apiblueprint.png"/></a><br/>
+							<a class="fragment" href="http://raml.org"><img class="no-border" src="/img/raml.png"/></a><br/>
+							<span class="fragment">...or any text editor of your choice.</span>
+						</p>
+
+						<aside class="notes">
+							<ul>
+								<li>Apiary: My preferred</li>
+								<li>API Blueprint: Apiary tool - documentation-oriented API description language.</li>
+								<li>Raml: RESTful API Modeling Language - succinct way of describing practically-RESTful APIs.</li>
+								<li>Or even just spec out the JSON models in a loosely organized document</li>
+							</ul>
+						</aside>
+					</section>
+
+					<section>
+						<h2>Get <span class="text orange">colleagues</span> involved</h2>
+						<p><small>Show design drafts to people who will have to use it</small></p>
+
+						<aside class="notes">
+							You don't have to blast it out to the entire organization, but share the design with a few folks
+							you know are you going to have to interact with it
+						</aside>
+					</section>
+
+					<section>
+						<h2>It takes an <span class="text pink">organization</span></h2>
+						<p><small>Get * management involved as well</small></p>
+
+						<aside class="notes">
+							Product, project, engineering management. Bring them in the loop for the API design so it will become something they expect
+
+							"It sucks because we didn't have time to make it not suck, and not sucking wasn't a priority"
+						</aside>
+					</section>
+
+					<section>
+						<h2>Kick bad <span class="text blue">habits</span></h2>
+						<p><small>Your org is probably building bad internal APIs because it's a habit now.</small></p>
+
+						<aside class="notes">
+							Not because you don't care, but because the methods you've adopted don't care. Like trying to quit drinking but going to bars with friends.
+						</aside>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>Kill your <span class="text blue">darlings</span></h2>
+						<p><small>It's good to have organization guidelines and all, <span class="text blue">but</span>...</small></p>
+					</section>
+
+					<section>
+						<h2>Don't cling for <span class="text indigo">consistency</span> sake</h2>
+						<p><small>If patterns / best practices / dev preferences change enough, change with them</small></p>
+
+						<aside class="notes">
+							Don't get me wrong! Consistency is really important, but (within reason), you're generally better off erring on the
+							side of usability and happiness there.
+
+							identified a problem in that everyone is doing things differently and not learning from past successes / failures, and
+							their solution is to say okay, from now on *this* is how we'll do it… and now no one is allowed to learn from successes / failures
+							since the decision has been made
+						</aside>
+					</section>
+
+					<section>
+						<h2>Aim for <span class="text green">idiomatic</span></h2>
+						<p><small>Internal APIs should feel "standard" within the broader context</small></p>
+
+						<aside class="notes">
+							If it's a RESTful interface, use proper status codes, format error messages consistently, etc.
+						</aside>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2><span class="text orange">Document</span> everything</h2>
+						<p><small><span class="text struck">Even</span> Especially if you're not proud of it.</small></p>
+					</section>
+
+					<section>
+						<h2>Own up to <span class="text pink">shortcomings</span></h2>
+						<p><small>Surprises are worse than idiosyncracies</small></p>
+
+						<aside class="notes">
+							Even if it's the terrible monstrosity some guy that quit built last year but no one has the time to rebuild it...at least document it.
+						</aside>
+					</section>
+
+					<section>
+						<h2>Keep it <span class="text blue">up to date</span></h2>
+						<p><small>This is harder than it seems. Admit it.</small></p>
+
+						<aside class="notes">
+							Drift happens with nearly probability 1. Try to make a habit of updating docs when you update the API.
+						</aside>
+					</section>
+
+					<section>
+						<h2>Be a good <span class="text indigo">citizen</span></h2>
+						<p><small>Update documentation when you notice problems.</small></p>
+
+						<aside class="notes">
+							Even if you didn't write a single bit of the API, if you notice a problem while using it, help out the next guy and
+							get the documentation changed.
+						</aside>
+					</section>
+				</section>
+
+				<section>
+					<section>
+						<h2>TL<span class="text pink">;</span>DR</h2>
+						<h3>Internal <span class="text pink">!=</span> cut corners</h3>
+					</section>
+
+					<section>
+						<h2>Think about <span class="text green">future</span> yous <i class="fa fa-users text green"></i></h2>
+						<p><small>These APIs will potentially be a communication layer for years.</small></p>
+
+						<aside class="notes">
+							Things usually start with noble intentions (get features out-the-door faster), but almost always end
+							with unfortunate longer-term consequences
+						</aside>
+					</section>
+				</section>
+
+				<section>
+					<h2>Thank you <i class="fa fa-heart text pink"></i></h2>
+					<p>
+						<small>
+							<a href="mailto:mmcclure@brightcove.com"><i class="fa fa-envelope"></i> mmcclure@brightcove.com</a><br/>
+							<a href="http://twitter.com/matt_mcclure"><i class="fa fa-twitter"></i> @matt_mcclure</a>
+						</small>
+					</p>
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: 'linear', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Parallax scrolling
+				// parallaxBackgroundImage: 'https://s3.amazonaws.com/hakim-static/reveal-js/reveal-parallax-1.jpg',
+				// parallaxBackgroundSize: '2100px 900px',
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
